@@ -173,11 +173,11 @@ export default function Home() {
                 ref={signatureRef}
                 id="signature-preview"
                 className="bg-white p-4 rounded-lg border-2 border-gray-200 shadow-sm"
-                style={{ width: "550px", margin: "0 auto" }}
+                style={{ width: "650px", margin: "0 auto" }}
               >
                 <div className="flex items-center justify-center gap-4">
                   {/* Informações do Colaborador */}
-                  <div className="flex-1 max-w-[250px]">
+                  <div className="flex-1 max-w-[350px]">
                     <div className="text-[18px] font-bold text-[#00203f] mb-1.5">
                       {nome}
                     </div>
@@ -201,10 +201,10 @@ export default function Home() {
                   </div>
 
                   {/* Divisória */}
-                  <div className="w-1 h-[80px] bg-[#6495ed] mx-4"></div>
+                  <div className="w-1 h-[80px] bg-[#6495ed] mx-6"></div>
 
                   {/* Logo */}
-                  <div className="flex-shrink-0 flex items-center justify-center" style={{ width: "120px", textAlign: "center" }}>
+                  <div className="flex-shrink-0 flex items-center justify-center" style={{ width: "180px", textAlign: "center" }}>
                     <img 
                       src="/LOGO_MMB.png" 
                       alt="GRUPO MMB" 
