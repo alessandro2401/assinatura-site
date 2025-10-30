@@ -1,0 +1,10 @@
+# robots.txt para assinatura.administradoramutual.com.br
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://assinatura.administradoramutual.com.br/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 1
