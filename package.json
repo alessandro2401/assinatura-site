@@ -1,0 +1,12 @@
+{
+  "name": "assinatura-site",
+  "version": "1.0.0",
+  "description": "Gerador de Assinatura de E-mail do Grupo MMB",
+  "scripts": {
+    "start": "npx http-server .",
+    "build": "echo 'Build estático concluído' && exit 0"
+  },
+  "dependencies": {
+    "http-server": "^14.1.1"
+  }
+}
