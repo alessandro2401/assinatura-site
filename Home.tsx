@@ -195,8 +195,8 @@ export default function Home() {
                       <Mail className="w-3.5 h-3.5 text-[#6495ed]" />
                       {email}
                     </div>
-                    <div className="text-[10px] text-gray-400 italic">
-                      Mobilidade • Multiprotção • Benefícios
+                    <div className="text-[10px] text-gray-600 italic">
+                      Mobilidade • Multiproteção • Benefícios
                     </div>
                   </div>
 
@@ -204,11 +204,11 @@ export default function Home() {
                   <div className="w-0.5 h-[100px] bg-gray-300"></div>
 
                   {/* Logo */}
-                  <div className="flex-shrink-0" style={{ minWidth: "220px", textAlign: "center" }}>
+                  <div className="flex-shrink-0 flex items-center justify-center" style={{ minWidth: "120px", textAlign: "center" }}>
                     <img 
                       src="/LOGO_MMB.png" 
                       alt="GRUPO MMB" 
-                      style={{ height: "75px", width: "auto", maxWidth: "200px" }}
+                      style={{ height: "75px", width: "auto", maxWidth: "100%" }}
                       crossOrigin="anonymous"
                     />
                   </div>
