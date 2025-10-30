@@ -6,31 +6,63 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Separator } from "@/components/ui/separator";
 import { Copy, Download, Mail, CheckCircle2, Image as ImageIcon } from "lucide-react";
 import { toast } from "sonner";
-// import { LOGO_MMB_BASE64 } from "@/logo-base64";
 import domtoimage from "dom-to-image";
 
 export default function Home() {
+  // Estado da empresa selecionada
+  const [selectedCompany, setSelectedCompany] = useState<'mmb' | 'alpha'>('mmb');
+
+  // Estados do formulário
   const [nome, setNome] = useState("Nome do Colaborador");
   const [departamento, setDepartamento] = useState("Departamento do Colaborador");
   const [email, setEmail] = useState("email@grupommb.com");
+  const [telefone, setTelefone] = useState("");
   const [copied, setCopied] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const signatureRef = useRef<HTMLDivElement>(null);
 
-  const htmlCode = `<table cellpadding="0" cellspacing="0" border="0" style="font-family: Arial, sans-serif; max-width: 650px;">
+  // Função para gerar código HTML do MMB
+  const generateMMBHtmlCode = () => {
+    const telefoneLine = telefone ? `<div style="font-size: 14px; color: #555; margin-bottom: 8px;">📱 ${telefone}</div>` : '';
+    
+    return `<table cellpadding="0" cellspacing="0" border="0" style="font-family: Arial, sans-serif; max-width: 650px;">
   <tr>
     <td style="padding-right: 20px; vertical-align: middle;">
       <div style="font-size: 22px; font-weight: bold; color: #00203f; margin-bottom: 8px;">${nome}</div>
       <div style="font-size: 16px; color: #444; margin-bottom: 12px;">${departamento}</div>
       <div style="height: 2px; background: linear-gradient(90deg, #6495ed 0%, transparent 100%); margin-bottom: 12px; width: 220px;"></div>
-      <div style="font-size: 14px; color: #555; margin-bottom: 15px;">✉ ${email}</div>
+      <div style="font-size: 14px; color: #555; margin-bottom: 8px;">✉ ${email}</div>
+      ${telefoneLine}
       <div style="font-size: 11px; color: #333; font-style: italic; font-weight: 500;">Mobilidade • Multiproteção • Benefícios</div>
     </td>
-    <td style="border-left: 2px solid #ddd; padding-left: 20px; vertical-align: middle; text-align: center;">
-          <img src="https://seu-dominio.com/logo-mmb.png" alt="GRUPO MMB" style="height: 100px; width: auto;">
+    <td style="border-left: 3px solid #6495ed; padding-left: 20px; vertical-align: middle; text-align: center;">
+      <img src="https://seu-dominio.com/logo-mmb.png" alt="GRUPO MMB" style="height: 100px; width: auto;">
     </td>
   </tr>
 </table>`;
+  };
+
+  // Função para gerar código HTML da Alpha
+  const generateAlphaHtmlCode = () => {
+    const telefoneLine = telefone ? `<div style="font-size: 14px; color: #555; margin-bottom: 8px;">📱 ${telefone}</div>` : '';
+    
+    return `<table cellpadding="0" cellspacing="0" border="0" style="font-family: Arial, sans-serif; max-width: 650px;">
+  <tr>
+    <td style="padding-right: 20px; vertical-align: middle; text-align: center;">
+      <img src="https://seu-dominio.com/logo-alpha.png" alt="ALPHA PROTEÇÕES" style="height: 100px; width: auto;">
+    </td>
+    <td style="border-left: 3px solid #1E5BA8; padding-left: 20px; vertical-align: middle;">
+      <div style="font-size: 22px; font-weight: bold; color: #1E5BA8; margin-bottom: 8px;">${nome}</div>
+      <div style="font-size: 16px; color: #444; margin-bottom: 12px;">${departamento}</div>
+      <div style="height: 2px; background: linear-gradient(90deg, #1E5BA8 0%, transparent 100%); margin-bottom: 12px; width: 220px;"></div>
+      <div style="font-size: 14px; color: #555; margin-bottom: 8px;">✉ ${email}</div>
+      ${telefoneLine}
+    </td>
+  </tr>
+</table>`;
+  };
+
+  const htmlCode = selectedCompany === 'mmb' ? generateMMBHtmlCode() : generateAlphaHtmlCode();
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(htmlCode);
@@ -38,6 +70,7 @@ export default function Home() {
     toast.success("Código HTML copiado!", {
       description: "Cole na configuração de assinatura do seu e-mail"
     });
+    setTimeout(() => setCopied(false), 2000);
   };
 
   const downloadAsImage = async () => {
@@ -47,15 +80,14 @@ export default function Home() {
     const toastId = "download-image-" + Date.now();
 
     try {
+      setDownloading(true);
       toast.loading("Gerando imagem...", {
         id: toastId,
         description: "Aguarde enquanto criamos sua assinatura em PNG"
       });
 
-      // Aguardar um pouco para o toast renderizar
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      // Usar dom-to-image para capturar o preview no tamanho real
       const dataUrl = await domtoimage.toPng(signatureRef.current, {
         quality: 1,
         bgcolor: "#ffffff",
@@ -70,7 +102,6 @@ export default function Home() {
       document.body.appendChild(link);
       link.click();
       
-      // Aguardar antes de remover
       setTimeout(() => {
         document.body.removeChild(link);
       }, 100);
@@ -85,23 +116,55 @@ export default function Home() {
         id: toastId,
         description: "Tente novamente ou use o código HTML"
       });
+    } finally {
+      setDownloading(false);
     }
   };
+
+  const headerColor = selectedCompany === 'mmb' ? '#00203f' : '#1E5BA8';
+  const accentColor = selectedCompany === 'mmb' ? '#6495ed' : '#1E5BA8';
+  const companyName = selectedCompany === 'mmb' ? 'GRUPO MMB' : 'ALPHA PROTEÇÕES';
+  const companyTagline = selectedCompany === 'mmb' ? 'Mobilidade • Multiproteção • Benefícios' : 'Proteções e Segurança';
+  const logoSrc = selectedCompany === 'mmb' ? '/LOGO_MMB.png' : '/LOGO_ALPHA.png';
+  const emailPlaceholder = selectedCompany === 'mmb' ? 'Ex: joao.silva@grupommb.com' : 'Ex: junio.tosta@alphanacional.com.br';
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
       {/* Header */}
-      <header className="bg-[#00203f] text-white py-6 shadow-lg">
+      <header className="text-white py-6 shadow-lg" style={{ backgroundColor: headerColor }}>
         <div className="container flex items-center justify-center gap-3">
           <Mail className="w-8 h-8" />
           <div>
             <h1 className="text-2xl font-bold">Gerador de Assinatura de E-mail</h1>
-            <p className="text-sm text-blue-200">GRUPO MMB - Mobilidade • Multiproteção • Benefícios</p>
+            <p className="text-sm opacity-90">{companyName} - {companyTagline}</p>
           </div>
         </div>
       </header>
 
       <main className="container py-12">
+        {/* Seletor de Empresa */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>Selecione a Empresa</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex gap-4">
+              <Button
+                onClick={() => setSelectedCompany('mmb')}
+                className={`flex-1 ${selectedCompany === 'mmb' ? 'bg-[#00203f] text-white' : 'bg-gray-200 text-gray-800'}`}
+              >
+                GRUPO MMB
+              </Button>
+              <Button
+                onClick={() => setSelectedCompany('alpha')}
+                className={`flex-1 ${selectedCompany === 'alpha' ? 'bg-[#1E5BA8] text-white' : 'bg-gray-200 text-gray-800'}`}
+              >
+                ALPHA PROTEÇÕES
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Formulário */}
           <Card>
@@ -139,9 +202,19 @@ export default function Home() {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="Ex: joao.silva@grupommb.com"
+                  placeholder={emailPlaceholder}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="telefone">Telefone (Opcional)</Label>
+                <Input
+                  id="telefone"
+                  placeholder="Ex: (11) 98765-4321"
+                  value={telefone}
+                  onChange={(e) => setTelefone(e.target.value)}
                 />
               </div>
 
@@ -150,6 +223,7 @@ export default function Home() {
                   <span>💡</span> Como usar:
                 </h3>
                 <ol className="text-sm text-gray-600 space-y-1 list-decimal list-inside">
+                  <li>Selecione a empresa desejada</li>
                   <li>Preencha seus dados no formulário</li>
                   <li>Veja o preview ao lado com a logo real</li>
                   <li>Baixe como imagem PNG ou copie o código HTML</li>
@@ -176,42 +250,92 @@ export default function Home() {
                 style={{ width: "650px", margin: "0 auto" }}
               >
                 <div className="flex items-center justify-center gap-4">
-                  {/* Informações do Colaborador */}
-                  <div className="flex-1 max-w-[350px]">
-                    <div className="text-[18px] font-bold text-[#00203f] mb-1.5">
-                      {nome}
-                    </div>
-                    <div className="text-[14px] text-gray-700 mb-2">
-                      {departamento}
-                    </div>
-                    <div 
-                      className="h-0.5 mb-2"
-                      style={{
-                        background: "linear-gradient(90deg, #6495ed 0%, transparent 100%)",
-                        width: "180px"
-                      }}
-                    />
-                    <div className="text-[12px] text-gray-600 mb-2 flex items-center gap-1.5">
-                      <Mail className="w-3.5 h-3.5 text-[#6495ed]" />
-                      {email}
-                    </div>
-                    <div className="text-[10px] text-gray-600 italic">
-                      Mobilidade • Multiproteção • Benefícios
-                    </div>
-                  </div>
+                  {selectedCompany === 'mmb' ? (
+                    <>
+                      {/* Informações do Colaborador (MMB) */}
+                      <div className="flex-1 max-w-[350px]">
+                        <div className="text-[18px] font-bold text-[#00203f] mb-1.5">
+                          {nome}
+                        </div>
+                        <div className="text-[14px] text-gray-700 mb-2">
+                          {departamento}
+                        </div>
+                        <div 
+                          className="h-0.5 mb-2"
+                          style={{
+                            background: "linear-gradient(90deg, #6495ed 0%, transparent 100%)",
+                            width: "180px"
+                          }}
+                        />
+                        <div className="text-[12px] text-gray-600 mb-2 flex items-center gap-1.5">
+                          <Mail className="w-3.5 h-3.5 text-[#6495ed]" />
+                          {email}
+                        </div>
+                        {telefone && (
+                          <div className="text-[12px] text-gray-600 mb-2">
+                            📱 {telefone}
+                          </div>
+                        )}
+                        <div className="text-[10px] text-gray-600 italic">
+                          Mobilidade • Multiproteção • Benefícios
+                        </div>
+                      </div>
 
-                  {/* Divisória */}
-                  <div className="w-1 h-[80px] bg-[#6495ed] mx-6"></div>
+                      {/* Divisória */}
+                      <div className="w-1 h-[80px] bg-[#6495ed] mx-6"></div>
 
-                  {/* Logo */}
-                  <div className="flex-shrink-0 flex items-center justify-center" style={{ width: "180px", textAlign: "center" }}>
-                    <img 
-                      src="/LOGO_MMB.png" 
-                      alt="GRUPO MMB" 
-                      style={{ height: "75px", width: "auto", maxWidth: "100%" }}
-                      crossOrigin="anonymous"
-                    />
-                  </div>
+                      {/* Logo MMB */}
+                      <div className="flex-shrink-0 flex items-center justify-center" style={{ width: "180px", textAlign: "center" }}>
+                        <img 
+                          src={logoSrc}
+                          alt="GRUPO MMB" 
+                          style={{ height: "75px", width: "auto", maxWidth: "100%" }}
+                          crossOrigin="anonymous"
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      {/* Logo Alpha */}
+                      <div className="flex-shrink-0 flex items-center justify-center" style={{ width: "180px", textAlign: "center" }}>
+                        <img 
+                          src={logoSrc}
+                          alt="ALPHA PROTEÇÕES" 
+                          style={{ height: "75px", width: "auto", maxWidth: "100%" }}
+                          crossOrigin="anonymous"
+                        />
+                      </div>
+
+                      {/* Divisória */}
+                      <div className="w-1 h-[80px] bg-[#1E5BA8] mx-6"></div>
+
+                      {/* Informações do Colaborador (Alpha) */}
+                      <div className="flex-1 max-w-[350px]">
+                        <div className="text-[18px] font-bold text-[#1E5BA8] mb-1.5">
+                          {nome}
+                        </div>
+                        <div className="text-[14px] text-gray-700 mb-2">
+                          {departamento}
+                        </div>
+                        <div 
+                          className="h-0.5 mb-2"
+                          style={{
+                            background: "linear-gradient(90deg, #1E5BA8 0%, transparent 100%)",
+                            width: "180px"
+                          }}
+                        />
+                        <div className="text-[12px] text-gray-600 mb-2 flex items-center gap-1.5">
+                          <Mail className="w-3.5 h-3.5 text-[#1E5BA8]" />
+                          {email}
+                        </div>
+                        {telefone && (
+                          <div className="text-[12px] text-gray-600 mb-2">
+                            📱 {telefone}
+                          </div>
+                        )}
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -220,7 +344,8 @@ export default function Home() {
                 <Button
                   onClick={downloadAsImage}
                   disabled={downloading}
-                  className="w-full bg-[#00203f] hover:bg-[#003366]"
+                  className="w-full text-white"
+                  style={{ backgroundColor: headerColor }}
                 >
                   {downloading ? (
                     <>
@@ -237,7 +362,8 @@ export default function Home() {
                 <Button
                   onClick={copyToClipboard}
                   variant="outline"
-                  className="w-full border-[#00203f] text-[#00203f] hover:bg-[#00203f] hover:text-white"
+                  className="w-full"
+                  style={{ borderColor: headerColor, color: headerColor }}
                 >
                   {copied ? (
                     <>
@@ -252,20 +378,6 @@ export default function Home() {
                   )}
                 </Button>
               </div>
-
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={() => {
-                  const instructionsSection = document.getElementById("instructions");
-                  if (instructionsSection) {
-                    instructionsSection.scrollIntoView({ behavior: "smooth" });
-                  }
-                }}
-              >
-                <Download className="w-4 h-4 mr-2" />
-                Ver Instruções
-              </Button>
             </CardContent>
           </Card>
         </div>
@@ -285,80 +397,11 @@ export default function Home() {
               <pre className="bg-gray-50 p-4 rounded-lg overflow-x-auto text-sm border">
                 <code>{htmlCode}</code>
               </pre>
-              <Button
-                size="sm"
-                variant="ghost"
-                className="absolute top-2 right-2"
-                onClick={copyToClipboard}
-              >
-                {copied ? <CheckCircle2 className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-              </Button>
-            </div>
-            <p className="text-sm text-amber-600 mt-4 flex items-center gap-2">
-              <span>⚠️</span>
-              Lembre-se de substituir a URL da imagem pela URL do logo hospedado online
-            </p>
-          </CardContent>
-        </Card>
-
-        {/* Guia de Configuração */}
-        <Card className="mt-8">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <span>📚</span> Guia de Configuração
-            </CardTitle>
-            <CardDescription>
-              Como adicionar a assinatura em diferentes clientes de e-mail
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid md:grid-cols-3 gap-6">
-              <div>
-                <h3 className="font-semibold mb-2 flex items-center gap-2">
-                  <ImageIcon className="w-5 h-5 text-[#6495ed]" />
-                  Usando Imagem PNG
-                </h3>
-                <p className="text-sm text-gray-600">
-                  Clique em "Baixar PNG" e insira a imagem diretamente na configuração de assinatura.
-                  Funciona em todos os clientes de e-mail.
-                </p>
-              </div>
-              <div>
-                <h3 className="font-semibold mb-2 flex items-center gap-2">
-                  <Copy className="w-5 h-5 text-[#6495ed]" />
-                  Usando Código HTML
-                </h3>
-                <p className="text-sm text-gray-600">
-                  Copie o código HTML, hospede o logo online, substitua a URL e cole na configuração
-                  de assinatura do seu cliente de e-mail.
-                </p>
-              </div>
-              <div>
-                <h3 className="font-semibold mb-2 flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-[#6495ed]" />
-                  Qual escolher?
-                </h3>
-                <p className="text-sm text-gray-600">
-                  PNG é mais fácil e rápido. HTML oferece melhor qualidade e permite links clicáveis
-                  no futuro.
-                </p>
-              </div>
             </div>
           </CardContent>
         </Card>
       </main>
-
-      {/* Footer */}
-      <footer className="bg-[#00203f] text-white py-6 mt-12">
-        <div className="container text-center">
-          <p className="text-sm">
-            © 2025 GRUPO MMB - Mobilidade • Multiproteção • Benefícios
-          </p>
-          <p className="text-xs text-blue-200 mt-2">
-            Gerador de Assinatura de E-mail Profissional
-          </p>
-        </div>
-      </footer>
     </div>
   );
 }
+
