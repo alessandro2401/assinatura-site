@@ -201,7 +201,7 @@ export default function Home() {
                   </div>
 
                   {/* Divisória */}
-                  <div className="w-0.5 h-[100px] bg-gray-300"></div>
+                  <div className="w-1 h-[80px] bg-[#6495ed]"></div>
 
                   {/* Logo */}
                   <div className="flex-shrink-0 flex items-center justify-center" style={{ minWidth: "120px", textAlign: "center" }}>
