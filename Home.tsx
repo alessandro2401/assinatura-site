@@ -24,7 +24,7 @@ export default function Home() {
       <div style="font-size: 16px; color: #444; margin-bottom: 12px;">${departamento}</div>
       <div style="height: 2px; background: linear-gradient(90deg, #6495ed 0%, transparent 100%); margin-bottom: 12px; width: 220px;"></div>
       <div style="font-size: 14px; color: #555; margin-bottom: 15px;">✉ ${email}</div>
-      <div style="font-size: 11px; color: #999; font-style: italic;">Mobilidade • Multiproteção • Benefícios</div>
+      <div style="font-size: 11px; color: #333; font-style: italic;">Mobilidade • Multiproteção • Benefícios</div>
     </td>
     <td style="border-left: 2px solid #ddd; padding-left: 20px; vertical-align: middle; text-align: center;">
           <img src="https://seu-dominio.com/logo-mmb.png" alt="GRUPO MMB" style="height: 100px; width: auto;">
