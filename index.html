@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador de Assinatura - MMB | Alpha</title>
-    <!-- Version: 2.0.0 - Updated: 2025-10-30 -->
+    <title>Gerador de Assinaturas - MMB & Alpha</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <style>
         * {
             margin: 0;
@@ -14,35 +16,61 @@
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f4f4f9;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
             padding: 20px;
         }
         
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+        .main-header {
+            text-align: center;
+            padding: 40px 20px;
+            background: white;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .main-header h1 {
+            font-size: 2.5em;
+            color: #00203f;
+            margin-bottom: 10px;
+        }
+        
+        .main-header p {
+            font-size: 1.1em;
+            color: #666;
+        }
+        
+        .generator-section {
+            max-width: 1400px;
+            margin: 0 auto 40px;
             background: white;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             overflow: hidden;
         }
         
-        .header {
-            background: #00203f; /* Default MMB Blue */
+        .section-header {
+            padding: 30px 40px;
             color: white;
-            padding: 40px;
             text-align: center;
-            transition: background-color 0.3s;
         }
         
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
+        .section-header.mmb {
+            background: linear-gradient(135deg, #00203f 0%, #003366 100%);
         }
         
-        .header p {
-            font-size: 1.1em;
+        .section-header.alpha {
+            background: linear-gradient(135deg, #1E5BA8 0%, #2a6bb5 100%);
+        }
+        
+        .section-header h2 {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+        
+        .section-header p {
+            font-size: 1em;
             opacity: 0.9;
         }
         
@@ -59,10 +87,10 @@
             border-radius: 15px;
         }
         
-        .form-section h2 {
-            color: #00203f;
+        .form-section h3 {
+            color: #333;
             margin-bottom: 20px;
-            font-size: 1.8em;
+            font-size: 1.5em;
         }
         
         .form-group {
@@ -99,13 +127,12 @@
             border: 2px solid #e0e0e0;
         }
         
-        .preview-section h2 {
-            color: #00203f;
+        .preview-section h3 {
+            color: #333;
             margin-bottom: 20px;
-            font-size: 1.8em;
+            font-size: 1.5em;
         }
         
-        /* Assinatura */
         .signature {
             background: white;
             border: 1px solid #e0e0e0;
@@ -113,8 +140,6 @@
             padding: 20px;
             margin-bottom: 20px;
             max-width: 650px;
-            margin-left: auto;
-            margin-right: auto;
         }
         
         .signature-content {
@@ -137,9 +162,16 @@
         
         .signature-divider {
             width: 3px;
-            height: 120px;
-            background: #6495ed; /* Default MMB */
+            height: 100px;
             flex-shrink: 0;
+        }
+        
+        .signature-divider.mmb {
+            background: #6495ed;
+        }
+        
+        .signature-divider.alpha {
+            background: #1E5BA8;
         }
         
         .signature-info {
@@ -148,101 +180,50 @@
         }
         
         .signature-name {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: bold;
-            color: #00203f; /* Default MMB */
             margin-bottom: 8px;
         }
         
+        .signature-name.mmb {
+            color: #00203f;
+        }
+        
+        .signature-name.alpha {
+            color: #1E5BA8;
+        }
+        
         .signature-department {
-            font-size: 16px;
+            font-size: 15px;
             color: #444;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
         
         .signature-line {
             height: 2px;
-            background: linear-gradient(90deg, #6495ed 0%, transparent 100%); /* Default MMB */
-            margin-bottom: 12px;
-            width: 220px;
+            margin-bottom: 10px;
+            width: 200px;
         }
         
-        .signature-email, .signature-phone {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
+        .signature-line.mmb {
+            background: linear-gradient(90deg, #6495ed 0%, transparent 100%);
+        }
+        
+        .signature-line.alpha {
+            background: linear-gradient(90deg, #1E5BA8 0%, transparent 100%);
+        }
+        
+        .signature-contact {
+            font-size: 13px;
             color: #555;
-            margin-bottom: 8px;
-        }
-
-        .signature-email::before {
-            content: "✉";
-            color: #6495ed; /* Default MMB */
-            font-size: 18px;
-        }
-
-        .signature-phone::before {
-            content: "📱";
-            color: #6495ed; /* Default MMB */
-            font-size: 18px;
+            margin-bottom: 6px;
         }
         
         .signature-slogan {
             font-size: 11px;
             color: #333;
             font-style: italic;
-            margin-top: 10px;
-        }
-
-        /* Alpha Styles */
-        .alpha-header {
-            background: #1E5BA8;
-        }
-        .alpha-name {
-            color: #1E5BA8;
-        }
-        .alpha-divider {
-            background: #1E5BA8;
-        }
-        .alpha-line {
-            background: linear-gradient(90deg, #1E5BA8 0%, transparent 100%);
-        }
-        .alpha-email::before, .alpha-phone::before {
-            color: #1E5BA8;
-        }
-
-        /* Toggle */
-        .toggle-group {
-            display: flex;
-            margin-bottom: 20px;
-        }
-        .toggle-btn {
-            flex: 1;
-            padding: 10px 20px;
-            border: 1px solid #ddd;
-            cursor: pointer;
-            text-align: center;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-        .toggle-btn:first-child {
-            border-top-left-radius: 8px;
-            border-bottom-left-radius: 8px;
-        }
-        .toggle-btn:last-child {
-            border-top-right-radius: 8px;
-            border-bottom-right-radius: 8px;
-        }
-        .toggle-btn.active-mmb {
-            background: #00203f;
-            color: white;
-            border-color: #00203f;
-        }
-        .toggle-btn.active-alpha {
-            background: #1E5BA8;
-            color: white;
-            border-color: #1E5BA8;
+            margin-top: 8px;
         }
         
         .buttons {
@@ -260,28 +241,27 @@
             cursor: pointer;
             transition: all 0.3s;
             flex: 1;
-        }
-        
-        .btn-primary {
-            background: #00203f;
             color: white;
         }
         
-        .btn-primary:hover {
+        .btn.mmb-primary {
+            background: #00203f;
+        }
+        
+        .btn.mmb-primary:hover {
             background: #003366;
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0,32,63,0.3);
         }
         
-        .btn-secondary {
-            background: #6495ed;
-            color: white;
+        .btn.alpha-primary {
+            background: #1E5BA8;
         }
         
-        .btn-secondary:hover {
-            background: #4169e1;
+        .btn.alpha-primary:hover {
+            background: #2a6bb5;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(100,149,237,0.3);
+            box-shadow: 0 5px 15px rgba(30,91,168,0.3);
         }
         
         .code-section {
@@ -292,34 +272,35 @@
             border: 1px solid #ddd;
         }
         
-        .code-section h3 {
-            color: #00203f;
+        .code-section h4 {
+            color: #333;
             margin-bottom: 10px;
-            font-size: 1.2em;
+            font-size: 1.1em;
         }
         
         .code-section textarea {
             width: 100%;
-            height: 150px;
+            height: 120px;
             padding: 15px;
             border: 1px solid #ddd;
             border-radius: 8px;
             font-family: 'Courier New', monospace;
-            font-size: 0.9em;
+            font-size: 0.85em;
             resize: vertical;
         }
         
         .instructions {
             background: #e3f2fd;
-            padding: 20px;
+            padding: 15px;
             border-radius: 10px;
-            margin-top: 20px;
+            margin-top: 15px;
             border-left: 4px solid #00203f;
+            font-size: 0.9em;
         }
         
-        .instructions h3 {
+        .instructions h4 {
             color: #00203f;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
         
         .instructions ol {
@@ -327,11 +308,11 @@
         }
         
         .instructions li {
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             color: #555;
         }
         
-        @media (max-width: 968px) {
+        @media (max-width: 1200px) {
             .content {
                 grid-template-columns: 1fr;
             }
@@ -339,270 +320,251 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header" id="header-section">
-            <h1>🎨 Gerador de Assinatura de E-mail</h1>
-            <p id="header-tagline">GRUPO MMB - Mobilidade • Multiproteção • Benefícios</p>
+    <div class="main-header">
+        <h1>🎨 Gerador de Assinaturas de E-mail</h1>
+        <p>Crie assinaturas profissionais para GRUPO MMB e ALPHA PROTEÇÕES</p>
+    </div>
+
+    <!-- GERADOR GRUPO MMB -->
+    <div class="generator-section">
+        <div class="section-header mmb">
+            <h2>GRUPO MMB</h2>
+            <p>Mobilidade • Multiproteção • Benefícios</p>
         </div>
         
         <div class="content">
-            <!-- Formulário -->
             <div class="form-section">
-                <h2>📝 Suas Informações</h2>
+                <h3>📝 Suas Informações</h3>
                 
-                <div class="toggle-group">
-                    <div class="toggle-btn active-mmb" id="toggle-mmb" onclick="setCompany('mmb')">GRUPO MMB</div>
-                    <div class="toggle-btn" id="toggle-alpha" onclick="setCompany('alpha')">ALPHA PROTEÇÕES</div>
-                </div>
-
                 <div class="form-group">
-                    <label for="nome">Nome Completo</label>
-                    <input type="text" id="nome" placeholder="Ex: João Silva" value="Nome do Colaborador">
+                    <label for="mmb-nome">Nome Completo</label>
+                    <input type="text" id="mmb-nome" placeholder="Ex: João Silva" value="Nome do Colaborador">
                 </div>
                 
                 <div class="form-group">
-                    <label for="departamento">Departamento / Cargo</label>
-                    <input type="text" id="departamento" placeholder="Ex: Diretor Comercial" value="Departamento do Colaborador">
+                    <label for="mmb-departamento">Departamento / Cargo</label>
+                    <input type="text" id="mmb-departamento" placeholder="Ex: Diretor Comercial" value="Departamento">
                 </div>
                 
                 <div class="form-group">
-                    <label for="email">E-mail</label>
-                    <input type="email" id="email" placeholder="Ex: joao.silva@grupommb.com.br" value="email@grupommb.com.br">
+                    <label for="mmb-email">E-mail</label>
+                    <input type="email" id="mmb-email" placeholder="Ex: joao@grupommb.com" value="email@grupommb.com">
                 </div>
-
+                
                 <div class="form-group">
-                    <label for="telefone">Telefone (Opcional)</label>
-                    <input type="text" id="telefone" placeholder="Ex: (11) 98765-4321" value="">
+                    <label for="mmb-telefone">Telefone (Opcional)</label>
+                    <input type="text" id="mmb-telefone" placeholder="Ex: (11) 98765-4321" value="">
                 </div>
                 
                 <div class="instructions">
-                    <h3>💡 Como usar:</h3>
+                    <h4>💡 Como usar:</h4>
                     <ol>
-                        <li>Selecione a empresa desejada</li>
-                        <li>Preencha seus dados no formulário</li>
+                        <li>Preencha seus dados</li>
                         <li>Veja o preview ao lado</li>
-                        <li>Copie o código HTML gerado</li>
-                        <li>Cole na configuração de assinatura do seu e-mail</li>
+                        <li>Copie o código HTML</li>
+                        <li>Cole na configuração do seu e-mail</li>
                     </ol>
                 </div>
             </div>
             
-            <!-- Preview -->
             <div class="preview-section">
-                <h2>👁️ Preview da Assinatura</h2>
+                <h3>👁️ Preview</h3>
                 
-                <div class="signature" id="signature-preview">
-                    <div class="signature-content" id="signature-content">
-                        <!-- MMB Default Layout: Info Left, Logo Right -->
-                        <div class="signature-info" id="preview-info">
-                            <div class="signature-name" id="preview-nome">Nome do Colaborador</div>
-                            <div class="signature-department" id="preview-departamento">Departamento do Colaborador</div>
-                            <div class="signature-line" id="preview-line"></div>
-                            <div class="signature-email" id="preview-email"><span id="preview-email-text">email@grupommb.com.br</span></div>
-                            <div class="signature-phone" id="preview-phone" style="display: none;"><span id="preview-phone-text"></span></div>
-                            <div class="signature-slogan" id="preview-slogan">Mobilidade • Multiproteção • Benefícios</div>
+                <div class="signature" id="mmb-signature">
+                    <div class="signature-content">
+                        <div class="signature-info">
+                            <div class="signature-name mmb" id="mmb-preview-nome">Nome do Colaborador</div>
+                            <div class="signature-department" id="mmb-preview-departamento">Departamento</div>
+                            <div class="signature-line mmb"></div>
+                            <div class="signature-contact" id="mmb-preview-email">✉ email@grupommb.com</div>
+                            <div class="signature-contact" id="mmb-preview-telefone" style="display: none;">📱 </div>
+                            <div class="signature-slogan">Mobilidade • Multiproteção • Benefícios</div>
                         </div>
-                        <div class="signature-divider" id="preview-divider"></div>
-                        <div class="signature-logo" id="preview-logo-container">
-                            <img src="LOGO_MMB.png" alt="GRUPO MMB" id="preview-logo">
+                        <div class="signature-divider mmb"></div>
+                        <div class="signature-logo">
+                            <img src="LOGO_MMB.png" alt="GRUPO MMB">
                         </div>
                     </div>
                 </div>
                 
                 <div class="buttons">
-                    <button class="btn btn-primary" id="btn-copy" onclick="copyHTML()">📋 Copiar HTML</button>
-                    <button class="btn btn-secondary" id="btn-download" onclick="downloadImage()">💾 Baixar Imagem</button>
+                    <button class="btn mmb-primary" onclick="copyHTML('mmb')">📋 Copiar HTML</button>
                 </div>
                 
                 <div class="code-section">
-                    <h3>📄 Código HTML</h3>
-                    <textarea id="html-code" readonly></textarea>
+                    <h4>📄 Código HTML</h4>
+                    <textarea id="mmb-html-code" readonly></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GERADOR ALPHA PROTEÇÕES -->
+    <div class="generator-section">
+        <div class="section-header alpha">
+            <h2>ALPHA PROTEÇÕES</h2>
+            <p>Proteções e Segurança</p>
+        </div>
+        
+        <div class="content">
+            <div class="form-section">
+                <h3>📝 Suas Informações</h3>
+                
+                <div class="form-group">
+                    <label for="alpha-nome">Nome Completo</label>
+                    <input type="text" id="alpha-nome" placeholder="Ex: Maria Santos" value="Nome do Colaborador">
+                </div>
+                
+                <div class="form-group">
+                    <label for="alpha-departamento">Departamento / Cargo</label>
+                    <input type="text" id="alpha-departamento" placeholder="Ex: Gerente de Operações" value="Departamento">
+                </div>
+                
+                <div class="form-group">
+                    <label for="alpha-email">E-mail</label>
+                    <input type="email" id="alpha-email" placeholder="Ex: maria@alphanacional.com.br" value="email@alphanacional.com.br">
+                </div>
+                
+                <div class="form-group">
+                    <label for="alpha-telefone">Telefone (Opcional)</label>
+                    <input type="text" id="alpha-telefone" placeholder="Ex: (11) 98765-4321" value="">
+                </div>
+                
+                <div class="instructions">
+                    <h4>💡 Como usar:</h4>
+                    <ol>
+                        <li>Preencha seus dados</li>
+                        <li>Veja o preview ao lado</li>
+                        <li>Copie o código HTML</li>
+                        <li>Cole na configuração do seu e-mail</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="preview-section">
+                <h3>👁️ Preview</h3>
+                
+                <div class="signature" id="alpha-signature">
+                    <div class="signature-content">
+                        <div class="signature-logo">
+                            <img src="LOGO_ALPHA.png" alt="ALPHA PROTEÇÕES">
+                        </div>
+                        <div class="signature-divider alpha"></div>
+                        <div class="signature-info">
+                            <div class="signature-name alpha" id="alpha-preview-nome">Nome do Colaborador</div>
+                            <div class="signature-department" id="alpha-preview-departamento">Departamento</div>
+                            <div class="signature-line alpha"></div>
+                            <div class="signature-contact" id="alpha-preview-email">✉ email@alphanacional.com.br</div>
+                            <div class="signature-contact" id="alpha-preview-telefone" style="display: none;">📱 </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn alpha-primary" onclick="copyHTML('alpha')">📋 Copiar HTML</button>
+                </div>
+                
+                <div class="code-section">
+                    <h4>📄 Código HTML</h4>
+                    <textarea id="alpha-html-code" readonly></textarea>
                 </div>
             </div>
         </div>
     </div>
     
     <script>
-        let currentCompany = 'mmb';
-
-        // Elementos
-        const nomeInput = document.getElementById('nome');
-        const departamentoInput = document.getElementById('departamento');
-        const emailInput = document.getElementById('email');
-        const telefoneInput = document.getElementById('telefone');
-
-        const previewNome = document.getElementById('preview-nome');
-        const previewDepartamento = document.getElementById('preview-departamento');
-        const previewEmailText = document.getElementById('preview-email-text');
-        const previewPhone = document.getElementById('preview-phone');
-        const previewPhoneText = document.getElementById('preview-phone-text');
-        const previewSlogan = document.getElementById('preview-slogan');
-        const previewDivider = document.getElementById('preview-divider');
-        const previewLine = document.getElementById('preview-line');
-        const previewLogo = document.getElementById('preview-logo');
-        const signatureContent = document.getElementById('signature-content');
-        const headerSection = document.getElementById('header-section');
-        const headerTagline = document.getElementById('header-tagline');
-        const toggleMmb = document.getElementById('toggle-mmb');
-        const toggleAlpha = document.getElementById('toggle-alpha');
-        const btnCopy = document.getElementById('btn-copy');
-        const btnDownload = document.getElementById('btn-download');
-
-        // Cores e Dados
-        const MMB_COLORS = {
-            header: '#00203f',
-            accent: '#6495ed',
-            name: '#00203f',
-            slogan: 'Mobilidade • Multiproteção • Benefícios',
-            logo: 'LOGO_MMB.png',
-            emailPlaceholder: 'Ex: joao.silva@grupommb.com.br'
-        };
-        const ALPHA_COLORS = {
-            header: '#1E5BA8',
-            accent: '#1E5BA8',
-            name: '#1E5BA8',
-            slogan: 'Proteções e Segurança',
-            logo: 'LOGO_ALPHA.png',
-            emailPlaceholder: 'Ex: junio.tosta@alphanacional.com.br'
-        };
-
-        function setCompany(company) {
-            currentCompany = company;
-            const colors = company === 'mmb' ? MMB_COLORS : ALPHA_COLORS;
-
-            // Atualiza o toggle
-            toggleMmb.classList.remove('active-mmb', 'active-alpha');
-            toggleAlpha.classList.remove('active-mmb', 'active-alpha');
-            if (company === 'mmb') {
-                toggleMmb.classList.add('active-mmb');
-            } else {
-                toggleAlpha.classList.add('active-alpha');
-            }
-
-            // Atualiza o Header
-            headerSection.style.backgroundColor = colors.header;
-            headerTagline.textContent = `${company === 'mmb' ? 'GRUPO MMB' : 'ALPHA PROTEÇÕES'} - ${colors.slogan}`;
-            
-            // Atualiza o Formulário
-            emailInput.placeholder = colors.emailPlaceholder;
-
-            // Atualiza o Preview
-            previewNome.style.color = colors.name;
-            previewDivider.style.backgroundColor = colors.accent;
-            previewLine.style.background = `linear-gradient(90deg, ${colors.accent} 0%, transparent 100%)`;
-            previewSlogan.textContent = colors.slogan;
-            previewLogo.src = colors.logo;
-            
-            // Atualiza os ícones de email e telefone
-            const emailIcon = document.querySelector('#preview-email::before');
-            const phoneIcon = document.querySelector('#preview-phone::before');
-            // Como não podemos mudar o pseudo-elemento diretamente, vamos atualizar a classe no pai
-            document.getElementById('preview-email').classList.remove('alpha-email');
-            document.getElementById('preview-phone').classList.remove('alpha-phone');
-            if (company === 'alpha') {
-                document.getElementById('preview-email').classList.add('alpha-email');
-                document.getElementById('preview-phone').classList.add('alpha-phone');
-            }
-
-            // Inverte a ordem para Alpha
-            if (company === 'alpha') {
-                signatureContent.style.flexDirection = 'row-reverse';
-            } else {
-                signatureContent.style.flexDirection = 'row';
-            }
-
-            // Atualiza botões
-            btnCopy.style.backgroundColor = colors.accent;
-            btnCopy.style.borderColor = colors.accent;
-            btnDownload.style.backgroundColor = colors.accent;
-
-            updatePreview();
-        }
-
-        // Event Listeners
-        nomeInput.addEventListener('input', updatePreview);
-        departamentoInput.addEventListener('input', updatePreview);
-        emailInput.addEventListener('input', updatePreview);
-        telefoneInput.addEventListener('input', updatePreview);
+        // MMB Event Listeners
+        document.getElementById('mmb-nome').addEventListener('input', () => updatePreview('mmb'));
+        document.getElementById('mmb-departamento').addEventListener('input', () => updatePreview('mmb'));
+        document.getElementById('mmb-email').addEventListener('input', () => updatePreview('mmb'));
+        document.getElementById('mmb-telefone').addEventListener('input', () => updatePreview('mmb'));
         
-        function updatePreview() {
-            const nome = nomeInput.value || 'Nome do Colaborador';
-            const departamento = departamentoInput.value || 'Departamento do Colaborador';
-            const email = emailInput.value || (currentCompany === 'mmb' ? 'email@grupommb.com.br' : 'email@alphanacional.com.br');
-            const telefone = telefoneInput.value.trim();
+        // Alpha Event Listeners
+        document.getElementById('alpha-nome').addEventListener('input', () => updatePreview('alpha'));
+        document.getElementById('alpha-departamento').addEventListener('input', () => updatePreview('alpha'));
+        document.getElementById('alpha-email').addEventListener('input', () => updatePreview('alpha'));
+        document.getElementById('alpha-telefone').addEventListener('input', () => updatePreview('alpha'));
+        
+        function updatePreview(company) {
+            const nome = document.getElementById(`${company}-nome`).value || 'Nome do Colaborador';
+            const departamento = document.getElementById(`${company}-departamento`).value || 'Departamento';
+            const email = document.getElementById(`${company}-email`).value || `email@${company === 'mmb' ? 'grupommb.com' : 'alphanacional.com.br'}`;
+            const telefone = document.getElementById(`${company}-telefone`).value.trim();
             
-            previewNome.textContent = nome;
-            previewDepartamento.textContent = departamento;
-            previewEmailText.textContent = email;
+            document.getElementById(`${company}-preview-nome`).textContent = nome;
+            document.getElementById(`${company}-preview-departamento`).textContent = departamento;
+            document.getElementById(`${company}-preview-email`).textContent = '✉ ' + email;
             
+            const telefoneEl = document.getElementById(`${company}-preview-telefone`);
             if (telefone) {
-                previewPhoneText.textContent = telefone;
-                previewPhone.style.display = 'flex';
+                telefoneEl.textContent = '📱 ' + telefone;
+                telefoneEl.style.display = 'block';
             } else {
-                previewPhone.style.display = 'none';
+                telefoneEl.style.display = 'none';
             }
             
-            updateHTMLCode(nome, departamento, email, telefone);
+            updateHTMLCode(company, nome, departamento, email, telefone);
         }
         
-        function updateHTMLCode(nome, departamento, email, telefone) {
-            const isMMB = currentCompany === 'mmb';
-            const colors = isMMB ? MMB_COLORS : ALPHA_COLORS;
+        function updateHTMLCode(company, nome, departamento, email, telefone) {
+            const isMMB = company === 'mmb';
+            const color = isMMB ? '#6495ed' : '#1E5BA8';
+            const nameColor = isMMB ? '#00203f' : '#1E5BA8';
+            const logoSrc = isMMB ? 'https://seu-dominio.com/logo-mmb.png' : 'https://seu-dominio.com/logo-alpha.png';
             const logoAlt = isMMB ? 'GRUPO MMB' : 'ALPHA PROTEÇÕES';
-            const logoSrc = isMMB ? 'logo-mmb.png' : 'logo-alpha.png';
-            const sloganLine = isMMB ? `<div style="font-size: 11px; color: #333; font-style: italic; font-weight: 500;">Mobilidade • Multiproteção • Benefícios</div>` : '';
-            const telefoneLine = telefone ? `<div style="font-size: 14px; color: #555; margin-bottom: 8px;">📱 ${telefone}</div>` : '';
+            const sloganLine = isMMB ? `<div style="font-size: 11px; color: #333; font-style: italic; margin-top: 8px;">Mobilidade • Multiproteção • Benefícios</div>` : '';
+            const telefoneLine = telefone ? `<div style="font-size: 13px; color: #555; margin-bottom: 6px;">📱 ${telefone}</div>` : '';
             
-            // Layout MMB: Info Left, Logo Right
-            const infoBlockMMB = `
-            <td style="padding-right: 30px; vertical-align: middle; width: 400px;">
-                <div style="font-size: 22px; font-weight: bold; color: ${colors.name}; margin-bottom: 8px;">${nome}</div>
-                <div style="font-size: 16px; color: #444; margin-bottom: 12px;">${departamento}</div>
-                <div style="height: 2px; background: linear-gradient(90deg, ${colors.accent} 0%, transparent 100%); margin-bottom: 12px; width: 220px;"></div>
-                <div style="font-size: 14px; color: #555; margin-bottom: 8px;">✉ ${email}</div>
-                ${telefoneLine}
-                ${sloganLine}
-            </td>
-            <td style="border-left: 3px solid ${colors.accent}; padding-left: 30px; vertical-align: middle; text-align: center; width: 200px;">
-                <img src="https://seu-dominio.com/${logoSrc}" alt="${logoAlt}" style="height: 100px; width: auto;">
-            </td>`;
-
-            // Layout Alpha: Logo Left, Info Right (Mirrored)
-            const infoBlockAlpha = `
-            <td style="padding-right: 30px; vertical-align: middle; text-align: center; width: 200px;">
-                <img src="https://seu-dominio.com/${logoSrc}" alt="${logoAlt}" style="height: 100px; width: auto;">
-            </td>
-            <td style="border-left: 3px solid ${colors.accent}; padding-left: 30px; vertical-align: middle; width: 400px;">
-                <div style="font-size: 22px; font-weight: bold; color: ${colors.name}; margin-bottom: 8px;">${nome}</div>
-                <div style="font-size: 16px; color: #444; margin-bottom: 12px;">${departamento}</div>
-                <div style="height: 2px; background: linear-gradient(90deg, ${colors.accent} 0%, transparent 100%); margin-bottom: 12px; width: 220px;"></div>
-                <div style="font-size: 14px; color: #555; margin-bottom: 8px;">✉ ${email}</div>
-                ${telefoneLine}
-            </td>`;
-
-            const htmlCode = `<table cellpadding="0" cellspacing="0" border="0" style="font-family: Arial, sans-serif; max-width: 650px;">
-    <tr>
-        ${isMMB ? infoBlockMMB : infoBlockAlpha}
-    </tr>
+            let htmlCode;
+            
+            if (isMMB) {
+                // MMB: Info Left, Logo Right
+                htmlCode = `<table cellpadding="0" cellspacing="0" border="0" style="font-family: Arial, sans-serif; max-width: 650px;">
+  <tr>
+    <td style="padding-right: 30px; vertical-align: middle; width: 400px;">
+      <div style="font-size: 20px; font-weight: bold; color: ${nameColor}; margin-bottom: 8px;">${nome}</div>
+      <div style="font-size: 15px; color: #444; margin-bottom: 10px;">${departamento}</div>
+      <div style="height: 2px; background: linear-gradient(90deg, ${color} 0%, transparent 100%); margin-bottom: 10px; width: 200px;"></div>
+      <div style="font-size: 13px; color: #555; margin-bottom: 6px;">✉ ${email}</div>
+      ${telefoneLine}
+      ${sloganLine}
+    </td>
+    <td style="border-left: 3px solid ${color}; padding-left: 30px; vertical-align: middle; text-align: center; width: 200px;">
+      <img src="${logoSrc}" alt="${logoAlt}" style="height: 75px; width: auto;">
+    </td>
+  </tr>
 </table>`;
+            } else {
+                // Alpha: Logo Left, Info Right
+                htmlCode = `<table cellpadding="0" cellspacing="0" border="0" style="font-family: Arial, sans-serif; max-width: 650px;">
+  <tr>
+    <td style="padding-right: 30px; vertical-align: middle; text-align: center; width: 200px;">
+      <img src="${logoSrc}" alt="${logoAlt}" style="height: 75px; width: auto;">
+    </td>
+    <td style="border-left: 3px solid ${color}; padding-left: 30px; vertical-align: middle; width: 400px;">
+      <div style="font-size: 20px; font-weight: bold; color: ${nameColor}; margin-bottom: 8px;">${nome}</div>
+      <div style="font-size: 15px; color: #444; margin-bottom: 10px;">${departamento}</div>
+      <div style="height: 2px; background: linear-gradient(90deg, ${color} 0%, transparent 100%); margin-bottom: 10px; width: 200px;"></div>
+      <div style="font-size: 13px; color: #555; margin-bottom: 6px;">✉ ${email}</div>
+      ${telefoneLine}
+    </td>
+  </tr>
+</table>`;
+            }
             
-            document.getElementById('html-code').value = htmlCode;
+            document.getElementById(`${company}-html-code`).value = htmlCode;
         }
         
-        function copyHTML() {
-            const textarea = document.getElementById('html-code');
+        function copyHTML(company) {
+            const textarea = document.getElementById(`${company}-html-code`);
             textarea.select();
             document.execCommand('copy');
             alert('✅ Código HTML copiado para a área de transferência!');
         }
         
-        function downloadImage() {
-            alert('💡 Para baixar a imagem, use o botão "Baixar PNG" na aplicação principal React.');
-        }
-        
         // Inicializar
-        setCompany('mmb');
-        updatePreview();
+        updatePreview('mmb');
+        updatePreview('alpha');
     </script>
 </body>
 </html>
