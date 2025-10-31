@@ -246,10 +246,10 @@ export default function Home() {
               <div 
                 ref={signatureRef}
                 id="signature-preview"
-                className="bg-white p-4 rounded-lg border-2 border-gray-200 shadow-sm"
+                className="bg-white rounded-lg border-2 border-gray-200 shadow-sm"
                 style={{ width: "650px", margin: "0 auto" }}
               >
-                <div className="flex items-center justify-center gap-4">
+                <div className="flex items-center justify-center gap-4 p-4">
                   {selectedCompany === 'mmb' ? (
                     <>
                       {/* Informações do Colaborador (MMB) */}
