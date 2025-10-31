@@ -377,7 +377,7 @@
                             <div class="signature-department" id="mmb-preview-departamento">Departamento</div>
                             <div class="signature-line mmb"></div>
                             <div class="signature-contact" id="mmb-preview-email">✉ email@grupommb.com</div>
-                            <div class="signature-contact" id="mmb-preview-telefone" style="display: none;">📱 </div>
+                            <div class="signature-contact" id="mmb-preview-telefone" style="display: none;">☎ </div>
                             <div class="signature-slogan">Mobilidade • Multiproteção • Benefícios</div>
                         </div>
                         <div class="signature-divider mmb"></div>
@@ -455,7 +455,7 @@
                             <div class="signature-department" id="alpha-preview-departamento">Departamento</div>
                             <div class="signature-line alpha"></div>
                             <div class="signature-contact" id="alpha-preview-email">✉ email@alphanacional.com.br</div>
-                            <div class="signature-contact" id="alpha-preview-telefone" style="display: none;">📱 </div>
+                            <div class="signature-contact" id="alpha-preview-telefone" style="display: none;">☎ </div>
                         </div>
                     </div>
                 </div>
@@ -492,12 +492,10 @@
             const telefone = document.getElementById(`${company}-telefone`).value.trim();
             
             document.getElementById(`${company}-preview-nome`).textContent = nome;
-            document.getElementById(`${company}-preview-departamento`).textContent = departamento;
-            document.getElementById(`${company}-preview-email`).textContent = '✉ ' + email;
-            
+            document.getElementById(`${company}-preview-departamento`).textContent = departamento            document.getElementById(`${company}-preview-telefone`).textContent = '☎ ' + telefone;         
             const telefoneEl = document.getElementById(`${company}-preview-telefone`);
             if (telefone) {
-                telefoneEl.textContent = '📱 ' + telefone;
+                telefoneEl.textContent = '☎ ' + telefone;
                 telefoneEl.style.display = 'block';
             } else {
                 telefoneEl.style.display = 'none';
@@ -513,7 +511,7 @@
             const logoSrc = isMMB ? 'https://seu-dominio.com/logo-mmb.png' : 'https://seu-dominio.com/logo-alpha.png';
             const logoAlt = isMMB ? 'GRUPO MMB' : 'ALPHA PROTEÇÕES';
             const sloganLine = isMMB ? `<div style="font-size: 11px; color: #333; font-style: italic; margin-top: 8px;">Mobilidade • Multiproteção • Benefícios</div>` : '';
-            const telefoneLine = telefone ? `<div style="font-size: 13px; color: #555; margin-bottom: 6px;">📱 ${telefone}</div>` : '';
+            const telefoneLine = telefone ? `<div style="font-size: 13px; color: #555; margin-bottom: 6px;">☎ ${telefone}</div>` : '';
             
             let htmlCode;
             
