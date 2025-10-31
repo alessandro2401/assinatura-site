@@ -492,7 +492,8 @@
             const telefone = document.getElementById(`${company}-telefone`).value.trim();
             
             document.getElementById(`${company}-preview-nome`).textContent = nome;
-            document.getElementById(`${company}-preview-departamento`).textContent = departamento            document.getElementById(`${company}-preview-telefone`).textContent = '☎ ' + telefone;         
+            document.getElementById(`${company}-preview-departamento`).textContent = departamento;
+            document.getElementById(`${company}-preview-email`).textContent = '✉ ' + email;         
             const telefoneEl = document.getElementById(`${company}-preview-telefone`);
             if (telefone) {
                 telefoneEl.textContent = '☎ ' + telefone;
